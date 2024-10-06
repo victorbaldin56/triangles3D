@@ -17,7 +17,7 @@ struct Plane {
 
 template <typename T>
 inline bool coincident( const Plane<T>& a, const Plane<T>& b) {
-  return is_close( a.n_, b.n_) && is_close( a.c_ && b.c_);
+  return is_close( a.n_, b.n_) && is_close( a.c_, b.c_);
 }
 
 template <typename T>

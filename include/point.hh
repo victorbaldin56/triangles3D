@@ -14,7 +14,7 @@ struct Point {
   // default-constructed point is "invalid"
   Point() {
     static_assert( std::numeric_limits<T>::has_quiet_NaN,
-                   "Unsupported floating-point representation");
+                   "Unsupported numeric type");
     T nan = std::numeric_limits<T>::quiet_NaN();
     x_ = nan;
     y_ = nan;
@@ -132,12 +132,12 @@ inline T triple_product( const Point<T>& a, const Point<T>& b, const Point<T>& c
 
 template <typename T>
 inline bool collinear( const Point<T>& a, const Point<T>& b) {
-  return is_close( vector_product( a, b), Point<T>::zero_vector());
+  return is_close( cross_product( a, b), Point<T>::zero_vector());
 }
 
 template <typename T>
 inline bool coplanar( const Point<T>& a, const Point<T>& b, const Point<T>& c) {
-  return is_close( triple_product( a, b, c), 0);
+  return is_close( triple_product( a, b, c), static_cast<T>(0));
 }
 
 template <typename T>

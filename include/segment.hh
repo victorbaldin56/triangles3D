@@ -27,6 +27,8 @@ struct Segment {
          z_min <= point.z_ && point.z_ <= z_max ) {
       return true;
     }
+
+    return false;
   }
 };
 
