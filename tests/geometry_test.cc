@@ -33,7 +33,7 @@ TEST( planes, ctor) {
 
   // normal tests
   Plane<float> p1{{1, 2, 3}, {4, 0, 1}, {2, -1, 5}};
-  Plane<float> p2{10, 8, 7, -47};
+  Plane<float> p2{10, 8, 7, 47};
 
   Plane<float> p3{{0, 0, 0}, {1, 1, 1}, {2, 1, 0}};
   Plane<float> p4{1, -2, 1, 0};
@@ -48,7 +48,24 @@ TEST( planes, ctor) {
 }
 
 TEST( planes, intersection) {
+  Plane<float> p1{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}};
+  ASSERT_FALSE( get_intersection( p1, Plane<float>{{0, 0, 1}, {1, 0, 1}, {0, 1, 1}}).is_valid());
 
+  Plane<float> p2{{0, 0, 0}, {1, 0, 0}, {0, 0, 1}};
+  auto l12 = get_intersection( p1, p2);
+
+  ASSERT_TRUE( l12.is_valid());
+  ASSERT_TRUE( coincident( l12, Line<float>{{1, 0, 0}, {0, 0, 0}}));
+
+  Point<float> a{8.9, 100.1, 90.9};
+  Point<float> b{11, 11.1, 11.11};
+
+  Plane<float> p3{b, a, {0, 0, 0}};
+  Plane<float> p4{a, b, {1e-5, 99, 0.4}};
+  auto l34 = get_intersection( p3, p4);
+
+  ASSERT_TRUE( l34.is_valid());
+  ASSERT_TRUE( coincident( l34, Line<float>{a - b, a}));
 }
 
 int main( int argc, char** argv) {

@@ -11,14 +11,15 @@ class Line {
 
  public:
   Line() {}
-  Line( const Point<T>& a, const Point<T>& b) : direction_{(a - b).normalize()}, origin_{a} {}
+  Line( const Point<T>& direction, const Point<T>& origin)
+    : direction_{Point<T>{direction}.normalize()}, origin_{origin} {}
 
   bool is_valid() const {
     return direction_.is_valid() && origin_.is_valid();
   }
 
   bool coincident_with( const Line<T>& rhs) const {
-    return (is_close( direction_, rhs.direction_) || is_close( direction_, -rhs.direction_)) &&
+    return collinear( direction_, rhs.direction_) &&
            collinear( origin_ - rhs.origin_, direction_);
   }
 
@@ -46,7 +47,7 @@ class Line {
 
 template <typename T>
 inline bool coincident( const Line<T>& a, const Line<T>& b) {
-  return a.coincident_with();
+  return a.coincident_with( b);
 }
 
 template <typename T>

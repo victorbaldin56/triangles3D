@@ -13,7 +13,7 @@ class Plane {
  public:
   Plane() : n_{}, d_{} {}
   Plane( const Point<T>& a, const Point<T>& b, const Point<T>& c)
-    : n_{cross_product( b - a, c - a).normalize()}, d_{-scalar_product( n_, a)} {}
+    : n_{cross_product( b - a, c - a).normalize()}, d_{scalar_product( n_, a)} {}
 
   // constructs plane ax + by + cz + d = 0
   Plane( T a, T b, T c, T d) {
@@ -32,15 +32,15 @@ class Plane {
            (is_close( n_, -rhs.n_) && is_close( d_, -rhs.d_));
   }
 
+  // https://en.wikipedia.org/wiki/Plane%E2%80%93plane_intersection
   Line<T> get_intersection( const Plane<T>& rhs) const {
-    T n_a_square = scalar_product( n_, n_);
-    T n_b_square = scalar_product( rhs.n_, rhs.n_);
-    T product    = scalar_product( n_, rhs.n_);
-    T denom      = n_a_square * n_b_square - product * product;
+    T dot = scalar_product( n_, rhs.n_);
+    T dnm = 1 - dot * dot;
+    T c1 = (d_ - rhs.d_ * dot) / dnm;
+    T c2 = (rhs.d_ - d_ * dot) / dnm;
 
-    return Line<T>{(rhs.d_ * product - d_ * n_b_square) / denom * n_ +
-                  (d_ * product - rhs.d_ * n_a_square) / denom * rhs.n_,
-                  cross_product( n_, rhs.n_)};
+    return Line<T>{cross_product( n_, rhs.n_),
+                   c1 * n_ + c2 * rhs.n_};
   }
 };
 
