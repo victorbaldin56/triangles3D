@@ -107,7 +107,7 @@ inline Point<T> operator+( const Point<T>& a) {
 
 template <typename T>
 inline Point<T> operator-( const Point<T>& a) {
-  return (-1) * a;
+  return static_cast<T>(-1) * a;
 }
 
 template <typename T>

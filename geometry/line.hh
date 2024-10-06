@@ -6,41 +6,52 @@
 namespace geometry {
 
 template <typename T>
-struct Line {
+class Line {
   Point<T> direction_, origin_;
 
+ public:
   Line() {}
   Line( const Point<T>& a, const Point<T>& b) : direction_{(a - b).normalize()}, origin_{a} {}
 
   bool is_valid() const {
     return direction_.is_valid() && origin_.is_valid();
   }
+
+  bool coincident_with( const Line<T>& rhs) const {
+    return (is_close( direction_, rhs.direction_) || is_close( direction_, -rhs.direction_)) &&
+           collinear( origin_ - rhs.origin_, direction_);
+  }
+
+  Point<T> get_intersection( const Line<T>& rhs) const {
+    if ( coincident_with( rhs) ) {
+      return Point<T>{};
+    }
+
+    auto diff = rhs.origin_ - origin_;
+
+    // skew case
+    if ( !coplanar( diff, direction_, rhs.direction_) ) {
+      return Point<T>{};
+    }
+
+    auto cross = cross_product( direction_, rhs.direction_);
+
+    return origin_ +
+          (direction_ * (scalar_product( cross_product( diff, rhs.direction_),
+                                         cross_product( origin_, diff)))
+          / scalar_product( cross, cross));
+
+  }
 };
 
 template <typename T>
 inline bool coincident( const Line<T>& a, const Line<T>& b) {
-  return is_close( a.direction_, b.direction_) && collinear( a.origin_ - b.origin_, a.direction_);
+  return a.coincident_with();
 }
 
 template <typename T>
 inline Point<T> get_intersection( const Line<T>& a, const Line<T>& b) {
-  if ( coincident( a, b) ) {
-    return Point<T>{};
-  }
-
-  auto diff = b.origin_ - a.origin_;
-
-  // skew case
-  if ( !coplanar( diff, a.direction_, b.direction_) ) {
-    return Point<T>{};
-  }
-
-  auto cross = cross_product( a.direction_, b.direction_);
-
-  return a.origin_ +
-         (a.direction_ * (scalar_product( cross_product( diff, b.direction_),
-                                          cross_product( a.origin_, diff)))
-          / scalar_product( cross, cross));
+  return a.get_intersection( b);
 }
 
 }

@@ -1,10 +1,54 @@
+#include <utility>
+
 #include <gtest/gtest.h>
 
 #include "triangle.hh"
 
+using namespace geometry;
+
+TEST( points, is_close) {
+  ASSERT_FALSE( is_close( Point<float>{1, 2, 0}, Point<float>{1, 2, 1}));
+  ASSERT_TRUE( is_close( Point<float>{1, 2, 3}, Point<float>{1, 2, 1 + 2}));
+}
+
+TEST( points, cross_product) {
+  ASSERT_TRUE( is_close( cross_product( Point<float>{1, 1, 1}, Point<float>{2, 2, 2}),
+                                        Point<float>{0, 0, 0}));
+  ASSERT_TRUE( is_close( cross_product( Point<float>{1, 0, 0}, Point<float>{0, 1, 0}),
+                                        Point<float>{0, 0, 1}));
+}
+
+TEST( points, normalize) {
+  auto n_x = 1 / std::sqrt( 3.f);
+  ASSERT_TRUE( is_close( Point<float>{1, 1, 1}.normalize(), Point<float>{n_x, n_x, n_x}));
+}
+
 // test plane construction from 3 points
-TEST( geometry, plane) {
-  EXPECT_FALSE( geometry::Plane<float>{}.is_valid());
+TEST( planes, ctor) {
+  // sanity test (3 points that do not define a plane)
+  ASSERT_FALSE( (Plane<float>{}.is_valid()));
+  ASSERT_FALSE( (Plane<float>{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}.is_valid()));
+  ASSERT_FALSE( (Plane<float>{{1, 2, 0}, {0, 0, 0}, {0, 0, 0}}.is_valid()));
+  ASSERT_FALSE( (Plane<float>{{1.2, 2.2, 4}, {2.4, 4.4, 8}, {6, 11, 20}}.is_valid()));
+
+  // normal tests
+  Plane<float> p1{{1, 2, 3}, {4, 0, 1}, {2, -1, 5}};
+  Plane<float> p2{10, 8, 7, -47};
+
+  Plane<float> p3{{0, 0, 0}, {1, 1, 1}, {2, 1, 0}};
+  Plane<float> p4{1, -2, 1, 0};
+
+  ASSERT_TRUE( p1.is_valid());
+  ASSERT_TRUE( p2.is_valid());
+  ASSERT_TRUE( p3.is_valid());
+  ASSERT_TRUE( p4.is_valid());
+
+  ASSERT_TRUE( coincident( p1, p2));
+  ASSERT_TRUE( coincident( p3, p4));
+}
+
+TEST( planes, intersection) {
+
 }
 
 int main( int argc, char** argv) {
