@@ -11,16 +11,21 @@ template <typename T>
 struct Point {
   T x_, y_, z_; // coordinates in 3D
 
-  Point() : x_{}, y_{}, z_{} {}
+  // default-constructed point is "invalid"
+  Point() {
+    static_assert( std::numeric_limits<T>::has_quiet_NaN,
+                   "Unsupported floating-point representation");
+    T nan = std::numeric_limits<T>::quiet_NaN();
+    x_ = nan;
+    y_ = nan;
+    z_ = nan;
+  }
+
   Point( T x, T y, T z) : x_{x}, y_{y}, z_{z} {}
 
   // in case of domain error we can leave point in "invalid" state
   bool is_valid() const {
     return std::isfinite( x_) && std::isfinite( y_) && std::isfinite( z_);
-  }
-
-  T norm() const {
-    return std::hypot( x_, y_, z_);
   }
 
   Point<T>& operator+=( const Point<T>& rhs) {
@@ -49,6 +54,19 @@ struct Point {
     y_ /= rhs;
     z_ /= rhs;
     return *this;
+  }
+
+  T length() const {
+    return std::hypot( x_, y_, z_);
+  }
+
+  Point<T>& normalize() {
+    (*this) /= length();
+    return *this;
+  }
+
+  static Point<T> zero_vector() {
+    return Point<T>{0, 0, 0};
   }
 };
 
@@ -93,15 +111,33 @@ inline Point<T> operator-( const Point<T>& a) {
 }
 
 template <typename T>
-inline T scalar_product( const Point<T>& a, const Point<T> b) {
+inline T scalar_product( const Point<T>& a, const Point<T>& b) {
   return a.x_ * b.x_ + a.y_ * b.y_ + a.z_ * b.z_;
 }
 
 template <typename T>
-inline Point<T> vector_product( const Point<T>& a, const Point<T> b) {
+inline Point<T> cross_product( const Point<T>& a, const Point<T>& b) {
   return Point<T>{a.y_ * b.z_ - a.z_ * b.y_,
                   a.z_ * b.x_ - a.x_ * b.z_,
                   a.x_ * b.y_ - a.y_ * b.x_};
+}
+
+template <typename T>
+inline T triple_product( const Point<T>& a, const Point<T>& b, const Point<T>& c) {
+  T k1 = a.y_ * b.z_ - a.z_ * b.y_;
+  T k2 = a.z_ * b.x_ - a.x_ * b.z_;
+  T k3 = a.x_ * b.y_ - a.y_ * b.x_;
+  return k1 * c.x_ + k2 * c.y_ + k3 * c.z_;
+}
+
+template <typename T>
+inline bool collinear( const Point<T>& a, const Point<T>& b) {
+  return is_close( vector_product( a, b), Point<T>::zero_vector());
+}
+
+template <typename T>
+inline bool coplanar( const Point<T>& a, const Point<T>& b, const Point<T>& c) {
+  return is_close( triple_product( a, b, c), 0);
 }
 
 template <typename T>
