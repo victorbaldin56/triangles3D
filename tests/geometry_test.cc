@@ -2,8 +2,9 @@
 
 #include "triangle.hh"
 
-TEST( geometry, planes_intersection) {
-
+// test plane construction from 3 points
+TEST( geometry, plane) {
+  EXPECT_FALSE( geometry::Plane<float>{}.is_valid());
 }
 
 int main( int argc, char** argv) {

@@ -13,6 +13,10 @@ struct Plane {
   Plane() : n_{}, c_{} {}
   Plane( const Point<T>& a, const Point<T>& b, const Point<T>& c)
     : n_{cross_product( b - a, c - a).normalize()}, c_{-scalar_product(n_, a)} {}
+
+  bool is_valid() const {
+    return std::isfinite( c_) && n_.is_valid();
+  }
 };
 
 template <typename T>
