@@ -68,6 +68,16 @@ TEST( planes, intersection) {
   ASSERT_TRUE( coincident( l34, Line<float>{a - b, a}));
 }
 
+TEST( triangles, intersection) {
+  Triangle<float> t1{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}};
+  Triangle<float> t2{{0, 0, -1}, {0, 0, 1}, {-100, -100, 0}};
+  Triangle<float> t3{{6, 0, 3}, {-3, -4, 0}, {-3, 4, 0}};
+  Triangle<float> t4{{0, -2, 4.2}, {0, 2, 4}, {0, 0, -10}};
+
+  ASSERT_TRUE( have_intersection( t1, t2));
+  ASSERT_TRUE( have_intersection( t3, t4));
+}
+
 int main( int argc, char** argv) {
   testing::InitGoogleTest( &argc, argv);
   return RUN_ALL_TESTS();

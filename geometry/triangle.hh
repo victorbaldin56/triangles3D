@@ -18,7 +18,7 @@ struct Triangle {
     return Plane<T>{a_, b_, c_};
   }
 
-  bool intersects_with( const Line<T>& line) const {
+  bool intersects( const Line<T>& line) const {
     Segment<T> ab{a_, b_};
     Segment<T> bc{b_, c_};
     Segment<T> ac{a_, c_};
@@ -46,6 +46,13 @@ inline bool have_intersection( const Triangle<T>& a, const Triangle<T>& b) {
   auto plane_a = a.plane();
   auto plane_b = b.plane();
 
+  bool valid_a = plane_a.is_valid();
+  bool valid_b = plane_b.is_valid();
+
+  if ( !valid_a && !valid_b ) {
+
+  }
+
   // coincident planes case
   if ( coincident( plane_a, plane_b) ) {
     return have_intersection_in_plane( a, b);
@@ -57,7 +64,7 @@ inline bool have_intersection( const Triangle<T>& a, const Triangle<T>& b) {
   if ( !intersection.is_valid() ) {
     return false;
   }
-  return a.intersects_with( intersection) && b.intersects_with( intersection);
+  return a.intersects( intersection) && b.intersects( intersection);
 }
 
 template <typename T>

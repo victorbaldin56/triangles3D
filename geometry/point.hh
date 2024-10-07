@@ -9,18 +9,15 @@ namespace geometry {
 
 template <typename T>
 struct Point {
-  T x_, y_, z_; // coordinates in 3D
+  static_assert( std::numeric_limits<T>::is_iec559,
+                 "Unsupported floating-point representation");
+  static_assert( std::numeric_limits<T>::has_quiet_NaN,
+                 "Unsupported numeric type");
+
+  T x_ = NAN, y_ = NAN, z_ = NAN; // coordinates in 3D
 
   // default-constructed point is "invalid"
-  Point() {
-    static_assert( std::numeric_limits<T>::has_quiet_NaN,
-                   "Unsupported numeric type");
-    T nan = std::numeric_limits<T>::quiet_NaN();
-    x_ = nan;
-    y_ = nan;
-    z_ = nan;
-  }
-
+  Point() {}
   Point( T x, T y, T z) : x_{x}, y_{y}, z_{z} {}
 
   // in case of domain error we can leave point in "invalid" state

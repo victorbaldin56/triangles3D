@@ -20,4 +20,5 @@ FetchContent_MakeAvailable(googletest)
 add_executable( geomtest tests/geometry_test.cc)
 target_link_libraries( geomtest gtest_main;geometry)
 
+include(CTest)
 add_test( NAME "UnitTest" COMMAND ${CMAKE_BINARY_DIR}/geomtest)
