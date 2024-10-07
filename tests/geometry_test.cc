@@ -94,6 +94,13 @@ TEST( triangles, intersection) {
   ASSERT_TRUE( intersect( t3, t4));
 }
 
+TEST( triangles, intersectInPlane) {
+  Triangle<float> t1{{1, 1, 1}, {2, 1, 1}, {2, 2, 1}};
+  Triangle<float> t2{{1, 2, 1}, {2, 1.5, 1}, {2, 2, 1}};
+
+  ASSERT_TRUE( intersect( t1, t2));
+}
+
 int main( int argc, char** argv) {
   testing::InitGoogleTest( &argc, argv);
   return RUN_ALL_TESTS();

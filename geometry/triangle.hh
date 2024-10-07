@@ -41,17 +41,11 @@ inline bool intersectInPlane( const Triangle<T>& a, const Triangle<T>& b) {
   return a.contains( b.a_) || a.contains( b.b_) || a.contains( b.c_);
 }
 
+// TODO: обработать случаи вырожденных треугольников
 template <typename T>
 inline bool intersect( const Triangle<T>& a, const Triangle<T>& b) {
   auto plane_a = a.plane();
   auto plane_b = b.plane();
-
-  bool valid_a = plane_a.valid();
-  bool valid_b = plane_b.valid();
-
-  if ( !valid_a && !valid_b ) {
-
-  }
 
   // coincident planes case
   if ( coincident( plane_a, plane_b) ) {
