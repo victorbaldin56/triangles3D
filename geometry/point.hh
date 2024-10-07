@@ -14,14 +14,13 @@ struct Point {
   static_assert( std::numeric_limits<T>::has_quiet_NaN,
                  "Unsupported numeric type");
 
-  T x_ = NAN, y_ = NAN, z_ = NAN; // coordinates in 3D
+  T x_, y_, z_; // coordinates in 3D
 
   // default-constructed point is "invalid"
-  Point() {}
-  Point( T x, T y, T z) : x_{x}, y_{y}, z_{z} {}
+  Point( T x = NAN, T y = NAN, T z = NAN) : x_{x}, y_{y}, z_{z} {}
 
   // in case of domain error we can leave point in "invalid" state
-  bool is_valid() const {
+  bool isValid() const {
     return std::isfinite( x_) && std::isfinite( y_) && std::isfinite( z_);
   }
 
@@ -62,14 +61,14 @@ struct Point {
     return *this;
   }
 
-  static Point<T> zero_vector() {
+  static Point<T> zeroVector() {
     return Point<T>{0, 0, 0};
   }
 };
 
 template <typename T>
-inline bool is_close( const Point<T>& a, const Point<T>& b) {
-  return is_close( a.x_, b.x_) && is_close( a.y_, b.y_) && is_close( a.z_, b.z_);
+inline bool isClose( const Point<T>& a, const Point<T>& b) {
+  return isClose( a.x_, b.x_) && isClose( a.y_, b.y_) && isClose( a.z_, b.z_);
 }
 
 template <typename T>
@@ -108,19 +107,19 @@ inline Point<T> operator-( const Point<T>& a) {
 }
 
 template <typename T>
-inline T scalar_product( const Point<T>& a, const Point<T>& b) {
+inline T scalarProduct( const Point<T>& a, const Point<T>& b) {
   return a.x_ * b.x_ + a.y_ * b.y_ + a.z_ * b.z_;
 }
 
 template <typename T>
-inline Point<T> cross_product( const Point<T>& a, const Point<T>& b) {
+inline Point<T> crossProduct( const Point<T>& a, const Point<T>& b) {
   return Point<T>{a.y_ * b.z_ - a.z_ * b.y_,
                   a.z_ * b.x_ - a.x_ * b.z_,
                   a.x_ * b.y_ - a.y_ * b.x_};
 }
 
 template <typename T>
-inline T triple_product( const Point<T>& a, const Point<T>& b, const Point<T>& c) {
+inline T tripleProduct( const Point<T>& a, const Point<T>& b, const Point<T>& c) {
   T k1 = a.y_ * b.z_ - a.z_ * b.y_;
   T k2 = a.z_ * b.x_ - a.x_ * b.z_;
   T k3 = a.x_ * b.y_ - a.y_ * b.x_;
@@ -129,12 +128,12 @@ inline T triple_product( const Point<T>& a, const Point<T>& b, const Point<T>& c
 
 template <typename T>
 inline bool collinear( const Point<T>& a, const Point<T>& b) {
-  return is_close( cross_product( a, b), Point<T>::zero_vector());
+  return isClose( crossProduct( a, b), Point<T>::zeroVector());
 }
 
 template <typename T>
 inline bool coplanar( const Point<T>& a, const Point<T>& b, const Point<T>& c) {
-  return is_close( triple_product( a, b, c), static_cast<T>(0));
+  return isClose( tripleProduct( a, b, c), static_cast<T>(0));
 }
 
 template <typename T>

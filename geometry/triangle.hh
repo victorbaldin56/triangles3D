@@ -26,28 +26,28 @@ struct Triangle {
   }
 
   T area() const {
-    return cross_product( c_ - a_, b_ - a_).length() / 2;
+    return crossProduct( c_ - a_, b_ - a_).length() / 2;
   }
 
   bool contains( const Point<T>& point) const {
-    return is_close( Triangle<T>{a_, b_, point}.area() +
+    return isClose( Triangle<T>{a_, b_, point}.area() +
                      Triangle<T>{a_, c_, point}.area() +
                      Triangle<T>{b_, c_, point}.area(), area());
   }
 };
 
 template <typename T>
-inline bool have_intersection_in_plane( const Triangle<T>& a, const Triangle<T>& b) {
+inline bool intersectInPlane( const Triangle<T>& a, const Triangle<T>& b) {
   return a.contains( b.a_) || a.contains( b.b_) || a.contains( b.c_);
 }
 
 template <typename T>
-inline bool have_intersection( const Triangle<T>& a, const Triangle<T>& b) {
+inline bool intersect( const Triangle<T>& a, const Triangle<T>& b) {
   auto plane_a = a.plane();
   auto plane_b = b.plane();
 
-  bool valid_a = plane_a.is_valid();
-  bool valid_b = plane_b.is_valid();
+  bool valid_a = plane_a.isValid();
+  bool valid_b = plane_b.isValid();
 
   if ( !valid_a && !valid_b ) {
 
@@ -55,13 +55,13 @@ inline bool have_intersection( const Triangle<T>& a, const Triangle<T>& b) {
 
   // coincident planes case
   if ( coincident( plane_a, plane_b) ) {
-    return have_intersection_in_plane( a, b);
+    return intersectInPlane( a, b);
   }
 
-  auto intersection = get_intersection( plane_a, plane_b);
+  auto intersection = getIntersection( plane_a, plane_b);
 
   // parallel & non-coincident planes case
-  if ( !intersection.is_valid() ) {
+  if ( !intersection.isValid() ) {
     return false;
   }
   return a.intersects( intersection) && b.intersects( intersection);

@@ -17,7 +17,7 @@ int main() {
 
   for ( std::size_t i = 0; i < triangles.size(); ) {
     for ( std::size_t j = ++i; j < triangles.size(); ++j) {
-      if ( geometry::have_intersection( triangles[i], triangles[j]) ) {
+      if ( geometry::intersect( triangles[i], triangles[j]) ) {
         ans.insert( i);
         ans.insert( j);
       }
