@@ -68,6 +68,22 @@ TEST( planes, intersection) {
   ASSERT_TRUE( coincident( l34, Line<float>{a - b, a}));
 }
 
+TEST( lines, intersection) {
+  Line<float> l1{{0, 0, 1}, {0, 0, 0}};
+  Line<float> l2{{1, 0, 0}, {0, 0, 0}};
+  auto p12 = getIntersection( l1, l2);
+
+  ASSERT_TRUE( p12.isValid());
+  ASSERT_TRUE( isClose( p12, {0, 0, 0}));
+
+  Line<float> l3{{1, 1, 1}, {0, 0, 0}};
+  Line<float> l4{{1, 0, 0}, {-1, 0, 0}};
+  auto p34 = getIntersection( l1, l2);
+
+  ASSERT_TRUE( p34.isValid());
+  ASSERT_TRUE( isClose( p34, {0, 0, 0}));
+}
+
 TEST( triangles, intersection) {
   Triangle<float> t1{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}};
   Triangle<float> t2{{0, 0, -1}, {0, 0, 1}, {-100, -100, 0}};
