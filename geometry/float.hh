@@ -8,7 +8,7 @@ namespace geometry {
 
 template <typename T>
 inline bool isClose( T x, T y) {
-  return std::fabs( x - y) <= std::numeric_limits<T>::epsilon();
+  return std::fabs( x - y) <= 1e-5;
 }
 
 }

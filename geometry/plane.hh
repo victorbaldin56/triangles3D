@@ -23,11 +23,11 @@ class Plane {
     d_ = d / len;
   }
 
-  bool isValid() const {
-    return std::isfinite( d_) && n_.isValid();
+  bool valid() const {
+    return std::isfinite( d_) && n_.valid();
   }
 
-  bool coincident( const Plane<T>& rhs) const {
+  bool coincidentWith( const Plane<T>& rhs) const {
     return (isClose( n_, rhs.n_) && isClose( d_, rhs.d_)) ||
            (isClose( n_, -rhs.n_) && isClose( d_, -rhs.d_));
   }
@@ -46,7 +46,7 @@ class Plane {
 
 template <typename T>
 inline bool coincident( const Plane<T>& a, const Plane<T>& b) {
-  return a.coincident( b);
+  return a.coincidentWith( b);
 }
 
 template <typename T>

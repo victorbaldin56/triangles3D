@@ -14,17 +14,17 @@ class Line {
   Line( const Point<T>& direction, const Point<T>& origin)
     : direction_{Point<T>{direction}.normalize()}, origin_{origin} {}
 
-  bool isValid() const {
-    return direction_.isValid() && origin_.isValid();
+  bool valid() const {
+    return direction_.valid() && origin_.valid();
   }
 
-  bool coincident( const Line<T>& rhs) const {
+  bool coincidentWith( const Line<T>& rhs) const {
     return collinear( direction_, rhs.direction_) &&
            collinear( origin_ - rhs.origin_, direction_);
   }
 
   Point<T> getIntersection( const Line<T>& rhs) const {
-    if ( coincident( rhs) ) {
+    if ( coincidentWith( rhs) ) {
       return Point<T>{};
     }
 
@@ -38,16 +38,15 @@ class Line {
     auto cross = crossProduct( direction_, rhs.direction_);
 
     return origin_ +
-          (direction_ * (scalarProduct( crossProduct( diff, rhs.direction_),
-                                         crossProduct( origin_, diff)))
-          / scalarProduct( cross, cross));
+           direction_ * ((scalarProduct( crossProduct( diff, rhs.direction_), cross)) /
+           cross.length2());
 
   }
 };
 
 template <typename T>
 inline bool coincident( const Line<T>& a, const Line<T>& b) {
-  return a.coincident( b);
+  return a.coincidentWith( b);
 }
 
 template <typename T>

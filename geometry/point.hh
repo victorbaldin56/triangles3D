@@ -20,7 +20,7 @@ struct Point {
   Point( T x = NAN, T y = NAN, T z = NAN) : x_{x}, y_{y}, z_{z} {}
 
   // in case of domain error we can leave point in "invalid" state
-  bool isValid() const {
+  bool valid() const {
     return std::isfinite( x_) && std::isfinite( y_) && std::isfinite( z_);
   }
 
@@ -52,8 +52,12 @@ struct Point {
     return *this;
   }
 
+  T length2() const {
+    return x_ * x_ + y_ * y_ + z_ * z_;
+  }
+
   T length() const {
-    return std::hypot( x_, y_, z_);
+    return std::sqrt( length2());
   }
 
   Point<T>& normalize() {

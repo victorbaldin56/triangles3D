@@ -31,8 +31,8 @@ struct Triangle {
 
   bool contains( const Point<T>& point) const {
     return isClose( Triangle<T>{a_, b_, point}.area() +
-                     Triangle<T>{a_, c_, point}.area() +
-                     Triangle<T>{b_, c_, point}.area(), area());
+                    Triangle<T>{a_, c_, point}.area() +
+                    Triangle<T>{b_, c_, point}.area(), area());
   }
 };
 
@@ -46,8 +46,8 @@ inline bool intersect( const Triangle<T>& a, const Triangle<T>& b) {
   auto plane_a = a.plane();
   auto plane_b = b.plane();
 
-  bool valid_a = plane_a.isValid();
-  bool valid_b = plane_b.isValid();
+  bool valid_a = plane_a.valid();
+  bool valid_b = plane_b.valid();
 
   if ( !valid_a && !valid_b ) {
 
@@ -61,7 +61,7 @@ inline bool intersect( const Triangle<T>& a, const Triangle<T>& b) {
   auto intersection = getIntersection( plane_a, plane_b);
 
   // parallel & non-coincident planes case
-  if ( !intersection.isValid() ) {
+  if ( !intersection.valid() ) {
     return false;
   }
   return a.intersects( intersection) && b.intersects( intersection);
