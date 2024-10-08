@@ -35,7 +35,6 @@ struct Segment {
   }
 
  private:
-
   // FOR INTERNAL PURPOSE ONLY, assumes that a point is already on the segment's line
   bool containsLinePoint( const Point<T>& point) const {
     auto x_min = std::min( a_.x_, b_.x_), x_max = std::max( a_.x_, b_.x_);

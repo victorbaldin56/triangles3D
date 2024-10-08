@@ -34,6 +34,20 @@ struct Triangle {
                     Triangle<T>{a_, c_, point}.area() +
                     Triangle<T>{b_, c_, point}.area(), area());
   }
+
+  Segment<T> toSegment() const {
+    if ( !collinear( a_ - b_, c_ - b_) ) {
+      return Segment<T>{};
+    }
+
+    if ( scalarProduct( a_ - b_, c_ - b_) <= 0 ) {
+      return Segment<T>{a_, c_};
+    }
+    if ( scalarProduct( a_ - c_, b_ - c_) <= 0 ) {
+      return Segment<T>{a_, b_};
+    }
+    return Segment<T>{b_, c_};
+  }
 };
 
 template <typename T>
@@ -41,7 +55,6 @@ inline bool intersectInPlane( const Triangle<T>& a, const Triangle<T>& b) {
   return a.contains( b.a_) || a.contains( b.b_) || a.contains( b.c_);
 }
 
-// TODO: обработать случаи вырожденных треугольников
 template <typename T>
 inline bool intersect( const Triangle<T>& a, const Triangle<T>& b) {
   auto plane_a = a.plane();
@@ -52,13 +65,13 @@ inline bool intersect( const Triangle<T>& a, const Triangle<T>& b) {
     return intersectInPlane( a, b);
   }
 
-  auto intersection = getIntersection( plane_a, plane_b);
+  auto inter_line = getIntersection( plane_a, plane_b);
 
   // parallel & non-coincident planes case
-  if ( !intersection.valid() ) {
+  if ( !inter_line.valid() ) {
     return false;
   }
-  return a.intersects( intersection) && b.intersects( intersection);
+  return a.intersects( inter_line) && b.intersects( inter_line);
 }
 
 template <typename T>
