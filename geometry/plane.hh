@@ -42,6 +42,11 @@ class Plane {
     return Line<T>{crossProduct( n_, rhs.n_),
                    c1 * n_ + c2 * rhs.n_};
   }
+
+  Point<T> getIntersection( const Line<T>& line) {
+    T t0 = (d_ - scalarProduct( line.origin(), n_)) / scalarProduct( line.direction(), n_);
+    return line.origin() + line.direction() * t0;
+  }
 };
 
 template <typename T>

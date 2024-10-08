@@ -18,6 +18,10 @@ struct Segment {
     return Line<T>{a_ - b_, b_};
   }
 
+  bool valid() const {
+    return a_.valid() && b_.valid();
+  }
+
   bool intersects( const Line<T>& line) const {
     Line<T> segment_line = getLine();
     auto point = getIntersection( segment_line, line);
@@ -31,7 +35,7 @@ struct Segment {
     Line<T> other_line = other.getLine();
     auto point = getIntersection( line, other_line);
 
-    return containsLinePoint( point) && other.containsLinePoint();
+    return containsLinePoint( point) && other.containsLinePoint( point);
   }
 
  private:

@@ -56,7 +56,29 @@ inline bool intersectInPlane( const Triangle<T>& a, const Triangle<T>& b) {
 }
 
 template <typename T>
+inline bool intersect( const Triangle<T> t, const Segment<T> s ) {
+  auto inter_pt = t.plane().getIntersection( s.getLine());
+  if ( !inter_pt.valid() ) {
+    return false;
+  }
+  return t.contains( inter_pt);
+}
+
+template <typename T>
 inline bool intersect( const Triangle<T>& a, const Triangle<T>& b) {
+  auto segment_a = a.toSegment();
+  auto segment_b = b.toSegment();
+
+  if ( segment_a.valid() && segment_b.valid() ) {
+    return segment_a.intersects( segment_b);
+  }
+  if ( segment_a.valid() ) {
+    return intersect( a, segment_b);
+  }
+  if ( segment_b.valid() ) {
+    return intersect( b, segment_a);
+  }
+
   auto plane_a = a.plane();
   auto plane_b = b.plane();
 

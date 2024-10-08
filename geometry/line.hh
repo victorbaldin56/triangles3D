@@ -18,6 +18,14 @@ class Line {
     return direction_.valid() && origin_.valid();
   }
 
+  const Point<T>& origin() const {
+    return origin_;
+  }
+
+  const Point<T>& direction() const {
+    return direction_;
+  }
+
   bool coincidentWith( const Line<T>& rhs) const {
     return collinear( direction_, rhs.direction_) &&
            collinear( origin_ - rhs.origin_, direction_);
@@ -40,7 +48,6 @@ class Line {
     return origin_ +
            direction_ * ((scalarProduct( crossProduct( diff, rhs.direction_), cross)) /
            cross.length2());
-
   }
 };
 
