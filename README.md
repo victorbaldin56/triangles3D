@@ -1,27 +1,35 @@
 # triangles3D
-Вычислительная задача на поиск пересечения треугольников в трехмерном пространстве.
+Computational task aimed to get intersections of triangles
+in 3D space.
 
 ![image](img/triangles.jpg)
 
-## Сборка
-Собрать из исходного кода можно так:
-1. Клонировать репозиторий:
+## Prerequisites
+To build you need the following installed:
+* Git
+* CMake
+* Any C++ compiler supported by CMake
+
+## Build
+TO build:
+1. Clone repo:
 ```sh
 git clone https://github.com/victorbaldin56/triangles3D.git
 ```
-2. Сгенерировать конфигурацию сборки:
+2. Generate build files:
 ```sh
 cmake -S . -B build
 ```
-3. Вызвать систему сборки:
+3. Build:
 ```sh
 cmake --build build
 ```
 
-## Использование
-В директории `build` соберется исполняемый файл `main`, который необходимо
-запустить.
+## Usage
+In `build` subdirectory you will get an executable named `main` which you
+will need to run.
 
-На вход подается число вводимых треугольников $N$, далее
-$N$ троек точек. Выход: номера треугольников, которые пересекаются с
-любыми другими.
+Input:
+* $N$ - the number of triangles
+* $3N$ points, coordinates are single-precision floating point numbers
+(type `float` in C++).
