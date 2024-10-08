@@ -1,8 +1,7 @@
 cmake_minimum_required( VERSION 3.14)
 project( "triangles3D")
 
-add_library( geometry INTERFACE)
-target_include_directories( geometry INTERFACE geometry)
+add_subdirectory( geometry)
 
 add_executable( main src/main.cc)
 target_link_libraries( main geometry)
@@ -21,4 +20,4 @@ add_executable( geomtest tests/geometry_test.cc)
 target_link_libraries( geomtest gtest_main;geometry)
 
 include(CTest)
-add_test( NAME "UnitTest" COMMAND ${CMAKE_BINARY_DIR}/geomtest)
+add_test( NAME "geometry-test" COMMAND ${CMAKE_BINARY_DIR}/geomtest)
